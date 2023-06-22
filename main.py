@@ -1,35 +1,29 @@
 # main.py
 
-import streamlit as st
 import openai
+import streamlit as st
 from webpage_analysis import analyze_webpage, merge_schemas, validate_schema
 
-st.set_page_config(page_title="Schema Markup Analysis")
+def main():
+    st.title('Schema Markup Analysis App')
 
-# Get API key from secrets
-api_key = st.secrets["openai_api_key"]
+    api_key = st.text_input("Enter your OpenAI API key", type="password")
+    openai.api_key = api_key
 
-# Initialize OpenAI with the API key
-openai.api_key = api_key
+    url = st.text_input("Enter the URL you want to analyze")
 
-st.title("Schema Markup Analysis App")
+    if st.button("Analyze"):
+        webpage_text, old_schema, new_schema = analyze_webpage(url, openai)
 
-url = st.text_input("Enter URL", "")
+        merged_schema = merge_schemas(old_schema, new_schema, openai)
 
-if url:
-    st.markdown("### Analyzing webpage and generating schema markup...")
-    webpage_text, current_schema, new_schema = analyze_webpage(url, openai)
+        validation_result = validate_schema(merged_schema, openai)
 
-    st.markdown("### Merging current and new schema markup...")
-    merged_schema = merge_schemas(current_schema, new_schema)
+        st.write(f"Webpage Text: {webpage_text}")
+        st.write(f"Old Schema: {old_schema}")
+        st.write(f"New Schema: {new_schema}")
+        st.write(f"Merged Schema: {merged_schema}")
+        st.write(f"Validation Result: {validation_result}")
 
-    st.json(merged_schema)
-
-    st.markdown("### Validating schema markup...")
-    is_valid, validation_errors = validate_schema(merged_schema)
-
-    if is_valid:
-        st.success("Schema markup is valid!")
-    else:
-        st.error("Schema markup validation failed. Errors:")
-        st.write(validation_errors)
+if __name__ == "__main__":
+    main()
