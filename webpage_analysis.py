@@ -14,7 +14,7 @@ def analyze_webpage(url, openai):
     current_schema = extruct.extract(html)
 
     # Create GPT-4 prompt to generate schema markup based on webpage content
-    prompt = f"Generate a schema markup for a webpage with the following content: {webpage_text}"
+    prompt = f"Generate a very holistic schema markup for a webpage based on the following information that is found on that page. Use as many schema.org properties as possible, but make sure it is created as a graph: {webpage_text}"
     response = openai.ChatCompletion.create(model="gpt-3.5-turbo-16k", messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": prompt}], max_tokens=1000)
     new_schema = response.choices[0].message['content'].strip()
 
