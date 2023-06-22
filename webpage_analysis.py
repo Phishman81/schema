@@ -22,7 +22,7 @@ def analyze_webpage(url, openai):
 
 def merge_schemas(old_schema, new_schema, openai):
     prompt = f"Now we have two schemas:\n\nOld Schema: {old_schema}\nNew Schema: {new_schema}. Out of these 2 schemas create the best possible schema markup using all relevant information from both. Make sure there are no duplications. The goal is to create the most holistic schema markup possible based on the available information."
-    response = openai.ChatCompletion.create(model="gpt-3.5-turbo-16k", messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": prompt}], max_tokens=16000)
+    response = openai.ChatCompletion.create(model="gpt-3.5-turbo-16k", messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": prompt}], max_tokens=8000)
     merged_schema = response.choices[0].message['content'].strip()
 
     return merged_schema
