@@ -1,4 +1,3 @@
-"""
 # main.py
 
 import openai
@@ -54,7 +53,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-"""
 
 # Changes Made:
 # - Added try-except block to catch any error that occurs during the program execution.
